@@ -31,6 +31,31 @@ impl Graph {
 		//TODO
 
         let mut visit_order = vec![];
+        let mut wait_vec = vec![];
+
+        visit_order.push(start);
+        wait_vec.push(start);
+
+        let mut temp = start;
+
+        while !wait_vec.is_empty() {
+            for i in 0..self.adj[temp].len() {
+                if !visit_order.contains(&self.adj[temp][i]) {
+                    visit_order.push(self.adj[temp][i]);
+
+                    if !wait_vec.contains(&self.adj[temp][i]) {
+                        wait_vec.push(self.adj[temp][i]);
+                    }
+                }
+            }
+
+            wait_vec.remove(0);
+
+            if !wait_vec.is_empty() {
+                temp = wait_vec[0];
+            }
+        }
+
         visit_order
     }
 }

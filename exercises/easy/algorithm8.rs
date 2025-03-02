@@ -56,26 +56,61 @@ pub struct myStack<T>
 {
 	//TODO
 	q1:Queue<T>,
-	q2:Queue<T>
+	q2:Queue<T>,
+    sel_que: bool,
 }
 impl<T> myStack<T> {
     pub fn new() -> Self {
         Self {
 			//TODO
 			q1:Queue::<T>::new(),
-			q2:Queue::<T>::new()
+			q2:Queue::<T>::new(),
+            sel_que: true,
         }
     }
     pub fn push(&mut self, elem: T) {
         //TODO
+        if self.sel_que {
+            self.q1.enqueue(elem);
+        } else {
+            self.q2.enqueue(elem);
+        }
     }
     pub fn pop(&mut self) -> Result<T, &str> {
         //TODO
+        if self.sel_que {
+            if self.q1.is_empty() {
+                return Err("Stack is empty");
+            }
+            while self.q1.size() > 1 {
+                let temp = self.q1.dequeue().unwrap();
+                self.q2.enqueue(temp);
+            }
+            let temp = self.q1.dequeue().unwrap();
+            self.sel_que = !self.sel_que;
+            return Ok(temp);
+        } else {
+            if self.q2.is_empty() {
+                return Err("Stack is empty");
+            }
+            while self.q2.size() > 1 {
+                let temp = self.q2.dequeue().unwrap();
+                self.q1.enqueue(temp);
+            }
+            let temp = self.q2.dequeue().unwrap();
+            self.sel_que = !self.sel_que;
+            return Ok(temp);
+        }
 		Err("Stack is empty")
     }
     pub fn is_empty(&self) -> bool {
 		//TODO
-        true
+        if self.sel_que {
+            return self.q1.is_empty();
+        } else {
+            return self.q2.is_empty();
+        }
+    
     }
 }
 

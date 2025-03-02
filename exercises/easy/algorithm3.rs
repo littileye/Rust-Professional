@@ -5,8 +5,20 @@
 */
 
 
-fn sort<T>(array: &mut [T]){
+fn sort<T>(array: &mut [T])
+where
+    T: Ord + Copy,
+{
 	//TODO
+    for i in 0..array.len() {
+        for j in 0..array.len() - i - 1 {
+            if array[j] > array[j + 1] {
+                let mut t = array[j];
+                array[j] = array[j + 1];
+                array[j + 1] = t;
+            }
+        }
+    }
 }
 #[cfg(test)]
 mod tests {

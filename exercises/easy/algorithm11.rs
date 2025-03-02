@@ -15,7 +15,12 @@ use std::fmt::{self, Display, Formatter};
 
 pub fn find_missing_number(nums: Vec<i32>) -> i32 {
     // TODO: Implement the logic to find the missing number
-    0 // Placeholder return value
+    let n = nums.len();
+    let right_sum = ((n + 1) * (n + 2) / 2) as i32;
+    let real_sum: i32 = nums.iter().sum();
+    // println!("real_sums: {:?}", real_sum);
+    right_sum - real_sum
+    //0 // Placeholder return value
 }
 
 #[cfg(test)]

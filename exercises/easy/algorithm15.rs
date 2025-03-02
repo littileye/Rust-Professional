@@ -10,10 +10,31 @@
 */
 
 use std::fmt::{self, Display, Formatter};
+use std::collections::HashMap;
 
 pub fn longest_substring_without_repeating_chars(s: String) -> i32 {
     // TODO: Implement the logic to find the longest substring without repeating characters
-    0 // Placeholder return value
+    //0 // Placeholder return value
+    let mut char_indices = HashMap::new(); // 记录字符最后一次出现的位置
+    let mut max_len = 0; // 最大长度
+    let mut left = 0; // 滑动窗口的左边界
+
+    for (right, c) in s.chars().enumerate() {
+        // 如果字符已经出现过，并且其位置在窗口内，则移动左边界
+        if let Some(&prev_index) = char_indices.get(&c) {
+            if prev_index >= left {
+                left = prev_index + 1;
+            }
+        }
+
+        // 更新字符的最后出现位置
+        char_indices.insert(c, right);
+
+        // 更新最大长度
+        max_len = max_len.max((right - left + 1) as i32);
+    }
+
+    max_len
 }
 
 #[cfg(test)]

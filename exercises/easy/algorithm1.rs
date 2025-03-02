@@ -70,13 +70,45 @@ impl<T> LinkedList<T> {
         }
     }
 	pub fn merge(list_a:LinkedList<T>,list_b:LinkedList<T>) -> Self
+    where T: Ord + Clone,
 	{
 		//TODO
-		Self {
-            length: 0,
-            start: None,
-            end: None,
+		
+        let mut list_m = LinkedList::new();
+        let mut current_a = list_a.start;
+        let mut current_b = list_b.start;
+
+        loop {
+            match (current_a, current_b) {
+                (Some(a_ptr), Some(b_ptr)) => {
+                    let a_node = unsafe { &*a_ptr.as_ptr() };
+                    let b_node = unsafe { &*b_ptr.as_ptr() };
+                    if a_node.val <= b_node.val {
+                        list_m.add(a_node.val.clone());
+                        current_a = a_node.next;
+                    } else {
+                        list_m.add(b_node.val.clone());
+                        current_b = b_node.next;
+                    }
+                }
+                _ => break,
+            }
         }
+
+        while let Some(a_ptr) = current_a {
+            let a_node = unsafe { &*a_ptr.as_ptr() };
+            list_m.add(a_node.val.clone());
+            current_a = a_node.next;
+        }
+
+        // 加入list_b中剩余的节点
+        while let Some(b_ptr) = current_b {
+            let b_node = unsafe { &*b_ptr.as_ptr() };
+            list_m.add(b_node.val.clone());
+            current_b = b_node.next;
+        }
+
+        list_m
 	}
 }
 
